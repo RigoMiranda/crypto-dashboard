@@ -1,7 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { Order, OrderStatus } from 'coinbase-pro-node';
-import { getClient } from '../../../vendors/coinbase/config';
-import { calculateDifference } from '../../../vendors/utils';
+import { getClient } from './config';
+import { calculateDifference } from '../../vendors/utils';
 
 const client = getClient();
 
@@ -40,21 +39,27 @@ const getOrders = async (currency: string, status: (OrderStatus | 'all')[] = ['a
   }
 };
 
-const getAllOrders = async (currency: string): Promise<any> => {
+const getAllOrders = async (currency: string): Promise<Order[] | undefined> => {
   try {
     const orders = await getOrders(currency);
     const tempOrders = orders?.data as Order[];
-    /* Calculate Current Investment Amount*/
+
+    return tempOrders;
+  } catch (error: any) {
+    // Log Error Message
+    console.log(error.response?.data?.message);
+  }
+};
+
+const calculateInvestment = (orders: Order[]): number | undefined => {
+  try {
     let investment = 0;
-    for (const o of tempOrders) {
+    for (const o of orders) {
       if (o.side === 'sell') investment -= Number(o.executed_value);
       if (o.side === 'buy') investment += Number(o.executed_value);
     }
 
-    return {
-      orders: tempOrders,
-      investment,
-    };
+    return investment;
   } catch (error: any) {
     // Log Error Message
     console.log(error.response?.data?.message);
@@ -72,18 +77,15 @@ const getAccount = async (accountID: string) => {
   }
 };
 
-const Coin = async (req: NextApiRequest, res: NextApiResponse) => {
+const Coin = async (productID: string, currency: string) => {
   try {
-    const { productID, currency } = req.body;
     let tempPrice = 0.0;
     let tempSize = 0.0;
     let tempBalance = 0.0;
     let tempAvailable = 0.0;
     let tempUsd = 0.0;
     let tempPercentage24h = 0.0;
-    let investment = 0.0;
     let difCalc = {};
-    let orders = [];
 
     //@ts-ignore
     const { price, size } = await getTicker(currency);
@@ -97,17 +99,16 @@ const Coin = async (req: NextApiRequest, res: NextApiResponse) => {
     tempUsd = price * available;
     tempPercentage24h = calculateDifference(price, Number(stats?.open)).percentage;
 
-    const ordersData = await getAllOrders(currency);
-    orders = ordersData.orders;
-    investment = ordersData.investment;
-    if (ordersData?.orders) {
-      const order = ordersData?.orders[0];
+    const orders = (await getAllOrders(currency)) || [];
+    const investment = calculateInvestment(orders) || 0.0;
+    if (orders) {
+      const order = orders[0];
       if (order) {
         difCalc = calculateDifference(price, Number(order?.price));
       }
     }
 
-    res.status(200).json({
+    return {
       price: tempPrice,
       size: tempSize,
       balance: tempBalance,
@@ -117,10 +118,10 @@ const Coin = async (req: NextApiRequest, res: NextApiResponse) => {
       orders,
       investment,
       difCalc,
-    });
+    };
   } catch (error) {
     console.error(error);
-    res.status(400).json({ error: `Unexpected Error: ${error}` });
+    return {};
   }
 };
 

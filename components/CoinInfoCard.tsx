@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import { Coin } from '../vendors/coinbase';
 import { usdFormatter } from '../utils';
 import { useAppContext } from '../context/AppContext';
 import {
@@ -13,12 +12,20 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Orders from './Orders';
+import { CoinType } from '../types';
 
-export const CoinCard = ({ coin }: { coin: Coin }) => {
+export const CoinCard = ({ coin }: { coin: CoinType }) => {
   return (
     <Box display="flex" flex={1} flexDirection={{ xs: 'column', sm: 'row' }}>
       <Stack spacing={2} pb={2}>
-        <Typography color="text.secondary">{coin.currency}</Typography>
+        <Stack direction="row" spacing={1}>
+          <Box>
+            <img src={coin.logo} />
+          </Box>
+          <Typography fontSize={18} color="text.secondary">
+            {coin.currency}
+          </Typography>
+        </Stack>
         <Stack>
           <Typography color="text.secondary" variant="caption">
             Balance
@@ -77,7 +84,7 @@ const CoinInfoCard = () => {
 
   return (
     <Fragment>
-      {coins?.map((coin: Coin, i: number) => (
+      {coins?.map((coin: CoinType, i: number) => (
         <Box mb={2} key={i}>
           <Accordion>
             <AccordionSummary

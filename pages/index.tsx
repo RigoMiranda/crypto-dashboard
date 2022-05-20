@@ -10,7 +10,6 @@ const Home: NextPage = () => {
       sx={{
         flex: 1,
         display: 'flex',
-        minHeight: '100vh',
         flexDirection: 'column',
       }}
     >

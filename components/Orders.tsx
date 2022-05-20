@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { CoinType } from '../types';
 import OrdersTable from './Table/OrdersTable';
-import { Coin } from '../vendors/coinbase';
 
-const Orders = ({ coin }: { coin: Coin }) => {
+const Orders = ({ coin }: { coin: CoinType }) => {
   return (
     <Box>
       {!coin?.orders || coin?.orders?.length === 0 ? (
