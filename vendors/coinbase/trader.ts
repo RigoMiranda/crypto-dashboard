@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import CoinbasePro, { Account } from 'coinbase-pro-node';
+import { Account } from 'coinbase-pro-node';
 import { Coin } from '.';
 import { sleep } from '../utils';
-import { getClient } from './config';
+import axios from 'axios';
 
 export const useTrader = () => {
-  const client: CoinbasePro = getClient();
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [coins, setCoins] = useState<Coin[]>([]);
   const [portfolio, setPortfolio] = useState<number>(0.0);
@@ -13,38 +12,31 @@ export const useTrader = () => {
   const [usdId, setUsdId] = useState<string | undefined>();
 
   const updateTrader = async () => {
-    const accountsData = await getAccounts();
+    const { accounts: accountsData, usdId, usdAmount } = await getAccounts();
     if (!accountsData) return;
-    let tempAccounts = [];
     let tempCoins = [];
     let tempPortfolio = 0.0;
     for (const account of accountsData) {
-      if (account.available !== '0') {
-        if (account.currency === 'USD') {
-          setUsdId(account.id);
-          setUsdAmount(Number(account.available));
-        } else {
-          tempAccounts.push(account);
-          const coin = new Coin(account.id, account.currency);
-          await coin.init();
-          tempPortfolio += coin.usd;
-          tempCoins.push(coin);
-        }
-      }
+      const coin = new Coin(account.id, account.currency);
+      await coin.init();
+      tempPortfolio += coin.usd;
+      tempCoins.push(coin);
     }
 
     tempPortfolio += usdAmount;
     tempCoins = tempCoins.sort((a, b) => b.usd - a.usd);
 
-    setAccounts(tempAccounts);
+    setUsdId(usdId);
+    setUsdAmount(Number(usdAmount));
+    setAccounts(accountsData);
     setCoins(tempCoins);
     setPortfolio(tempPortfolio);
   };
 
   const getAccounts = async () => {
     try {
-      const accounts = await client?.rest.account.listAccounts();
-      return accounts;
+      const { data } = await axios.post(`/api/coinbase/accounts`);
+      return data;
     } catch (error: any) {
       // Log Error Message
       console.log(error.response?.data?.message);

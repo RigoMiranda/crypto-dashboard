@@ -6,6 +6,7 @@ export const getClient = () => {
     apiSecret: `${process.env.Secret}`,
     passphrase: `${process.env.Passphrase}`,
     useSandbox: false,
+    httpUrl: 'https://www.crypto.codelabs.guru',
   };
   return new CoinbasePro(auth);
 };
