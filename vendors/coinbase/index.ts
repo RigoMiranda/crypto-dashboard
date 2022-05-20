@@ -1,6 +1,6 @@
 import CoinbasePro, { NewOrder, Order, OrderSide, OrderStatus, OrderType } from 'coinbase-pro-node';
 import { getClient } from './config';
-import { calculateDifference, storeObject } from '../utils';
+import { calculateDifference } from '../utils';
 
 // https://public.sandbox.pro.coinbase.com/orders/filled
 

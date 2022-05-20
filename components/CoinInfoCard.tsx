@@ -29,6 +29,7 @@ export const CoinCard = ({ coin }: { coin: Coin }) => {
       <Grid
         display="flex"
         flex={1}
+        container
         direction="row"
         justifyContent="space-between"
         alignItems="center"
@@ -72,12 +73,12 @@ export const CoinCard = ({ coin }: { coin: Coin }) => {
 };
 
 const CoinInfoCard = () => {
-  const { trader } = useAppContext();
+  const { coins } = useAppContext();
 
   return (
     <Fragment>
-      {trader?.coins?.map((coin: Coin, i: number) => (
-        <Box mb={2}>
+      {coins?.map((coin: Coin, i: number) => (
+        <Box mb={2} key={i}>
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}

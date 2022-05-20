@@ -1,61 +1,49 @@
+import { useState } from 'react';
 import CoinbasePro, { Account } from 'coinbase-pro-node';
 import { Coin } from '.';
 import { sleep } from '../utils';
 import { getClient } from './config';
 
-export class Trader {
-  accounts: Account[];
-  coins: Coin[];
-  usdID: string | undefined;
-  usdAmount: number;
-  isTrading: boolean;
-  setTrader: any;
-  portfolio: number;
-  private client: CoinbasePro | undefined;
+export const useTrader = () => {
+  const client: CoinbasePro = getClient();
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [coins, setCoins] = useState<Coin[]>([]);
+  const [portfolio, setPortfolio] = useState<number>(0.0);
+  const [usdAmount, setUsdAmount] = useState<number>(0.0);
+  const [usdId, setUsdId] = useState<string | undefined>();
 
-  constructor() {
-    this.accounts = [];
-    this.coins = [];
-    this.usdAmount = 0.0;
-    this.portfolio = 0.0;
-    this.isTrading = false;
-    this.client = getClient();
-  }
-
-  init = async () => {
-    // TODO: Load Data from DB?
-    // Get Trader Data:
-    await this.updateTrader();
-  };
-
-  updateTrader = async () => {
-    const accounts = await this.getAccounts();
-    if (!accounts) return;
-    this.accounts = [];
-    this.coins = [];
-    this.portfolio = 0.0;
-    for (const account of accounts) {
+  const updateTrader = async () => {
+    const accountsData = await getAccounts();
+    if (!accountsData) return;
+    let tempAccounts = [];
+    let tempCoins = [];
+    let tempPortfolio = 0.0;
+    for (const account of accountsData) {
       if (account.available !== '0') {
         if (account.currency === 'USD') {
-          this.usdID = account.id;
-          this.usdAmount = Number(account.available);
+          setUsdId(account.id);
+          setUsdAmount(Number(account.available));
         } else {
-          this.accounts.push(account);
+          tempAccounts.push(account);
           const coin = new Coin(account.id, account.currency);
           await coin.init();
-          this.portfolio += coin.usd;
-          this.coins.push(coin);
+          tempPortfolio += coin.usd;
+          tempCoins.push(coin);
         }
       }
     }
-    this.portfolio += this.usdAmount;
-    this.coins = this.coins.sort((a, b) => b.usd - a.usd);
-    this.setTrader({ ...this });
+
+    tempPortfolio += usdAmount;
+    tempCoins = tempCoins.sort((a, b) => b.usd - a.usd);
+
+    setAccounts(tempAccounts);
+    setCoins(tempCoins);
+    setPortfolio(tempPortfolio);
   };
 
-  getAccounts = async () => {
+  const getAccounts = async () => {
     try {
-      const accounts = await this.client?.rest.account.listAccounts();
+      const accounts = await client?.rest.account.listAccounts();
       return accounts;
     } catch (error: any) {
       // Log Error Message
@@ -64,10 +52,18 @@ export class Trader {
     }
   };
 
-  trade = async () => {
-    // for (const coin of this.coins) {
-    //   await this.analyzer(coin);
-    // }
-    await sleep(10000);
+  const trade = async () => {
+    await sleep(8000);
+    await updateTrader();
   };
-}
+
+  return {
+    accounts,
+    coins,
+    portfolio,
+    usdAmount,
+    usdId,
+    updateTrader,
+    trade,
+  };
+};
