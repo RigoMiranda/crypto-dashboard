@@ -41,13 +41,11 @@ export enum OrderTableEnum {
 }
 
 type OrderTableType = {
-  title: string;
   orders: Order[];
   type?: OrderTableEnum;
 };
 
 export default function OrdersTable({
-  title,
   orders,
   type = OrderTableEnum.history,
 }: OrderTableType) {
@@ -58,17 +56,6 @@ export default function OrdersTable({
   };
   return (
     <TableContainer component={Paper}>
-      <Box
-        sx={{
-          p: 1,
-          borderBottom: '1px solid grey',
-          backgroundColor: 'white',
-        }}
-      >
-        <Typography color="black" align="center">
-          {title}
-        </Typography>
-      </Box>
       <Table aria-label="customized table">
         <TableHead>
           <TableRow>
