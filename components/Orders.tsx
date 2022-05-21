@@ -11,7 +11,7 @@ const Orders = ({ coin }: { coin: CoinType }) => {
           No Orders
         </Typography>
       ) : (
-        <OrdersTable title="Orders History" orders={coin?.orders} />
+        <OrdersTable orders={coin?.orders} />
       )}
     </Box>
   );
