@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import Image from 'next/image'
 import { usdFormatter } from '../utils';
 import { useAppContext } from '../context/AppContext';
 import {
@@ -20,7 +21,13 @@ export const CoinCard = ({ coin }: { coin: CoinType }) => {
       <Stack spacing={2} pb={2}>
         <Stack direction="row" spacing={1}>
           <Box>
-            <img src={coin.logo} />
+            // <img src={coin.logo} />
+            <Image
+              src={coin.logo}
+              alt="Picture of the author"
+              width={30}
+              height={30}
+            />
           </Box>
           <Typography fontSize={18} color="text.secondary">
             {coin.currency}
