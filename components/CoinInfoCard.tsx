@@ -21,7 +21,6 @@ export const CoinCard = ({ coin }: { coin: CoinType }) => {
       <Stack spacing={2} pb={2}>
         <Stack direction="row" spacing={1}>
           <Box>
-            // <img src={coin.logo} />
             <Image
               src={coin.logo}
               alt="Picture of the author"
