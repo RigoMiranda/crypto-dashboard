@@ -33,7 +33,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const columns = ['Type', 'Executed Value', 'Price', 'Size', 'Date'];
+const columns = ['Type', 'Executed Value', 'Size', 'Price', 'Date'];
 
 export enum OrderTableEnum {
   active,
