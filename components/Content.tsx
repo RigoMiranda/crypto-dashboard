@@ -4,7 +4,7 @@ import CoinInfoCard from './CoinInfoCard';
 
 export default function Content() {
   return (
-    <Box p={2} justifyContent="center">
+    <Box p={2} justifyContent="center" bgcolor="secondary">
       <CoinInfoCard />
     </Box>
   );
