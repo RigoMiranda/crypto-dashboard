@@ -24,8 +24,8 @@ export const CoinCard = ({ coin }: { coin: CoinType }) => {
             <Image
               src={coin.logo}
               alt="Picture of the author"
-              width={28}
-              height={28}
+              width={24}
+              height={24}
             />
           </Box>
           <Typography fontSize={18} color="text.secondary">
