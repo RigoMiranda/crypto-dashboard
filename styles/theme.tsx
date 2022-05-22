@@ -5,6 +5,7 @@ export const drawerWidth = 256;
 // Create a theme instance.
 export const theme = createTheme({
   palette: {
+    mode: 'dark',
     primary: {
       main: '#041C32',
     },
