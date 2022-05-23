@@ -10,17 +10,18 @@ export type APICredentialsType = {
 };
 
 export type CoinType = {
-  price: number;
-  size: number;
-  balance: number;
   available: number;
-  usd: number;
-  percentage24h: number;
-  orders: Order[];
-  investment: number;
+  balance: number;
+  coinBalance: number;
   currency: string;
-  logo: string;
   difCalc?: {
     percentage: number;
   };
+  investment: number;
+  logo: string;
+  orders: Order[];
+  percentage24h: number;
+  price: number;
+  size: number;
+  usd: number;
 };

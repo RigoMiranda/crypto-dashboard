@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import Image from 'next/image'
+import { Fragment } from 'react';
+import Image from 'next/image';
 import { usdFormatter } from '../utils';
 import { useAppContext } from '../context/AppContext';
 import {
@@ -14,6 +14,7 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Orders from './Orders';
 import { CoinType } from '../types';
+import { truncateDecimals } from '../vendors/utils';
 
 export const CoinCard = ({ coin }: { coin: CoinType }) => {
   return (
@@ -21,12 +22,7 @@ export const CoinCard = ({ coin }: { coin: CoinType }) => {
       <Stack spacing={2} pb={2}>
         <Stack direction="row" spacing={1}>
           <Box>
-            <Image
-              src={coin.logo}
-              alt="Picture of the author"
-              width={24}
-              height={24}
-            />
+            <Image src={coin.logo} alt="Picture of the author" width={24} height={24} />
           </Box>
           <Typography fontSize={18} color="text.secondary">
             {coin.currency}
@@ -37,6 +33,7 @@ export const CoinCard = ({ coin }: { coin: CoinType }) => {
             Balance
           </Typography>
           <Typography variant="h5">{usdFormatter.format(coin.usd)}</Typography>
+          <Typography variant="body1">{truncateDecimals(coin.coinBalance, 10)}</Typography>
         </Stack>
       </Stack>
       <Grid
@@ -91,7 +88,7 @@ const CoinInfoCard = () => {
   return (
     <Fragment>
       {coins?.map((coin: CoinType, i: number) => (
-        <Box mb={2} key={i}>
+        <Box key={i} p={1.5}>
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}

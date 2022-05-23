@@ -5,7 +5,7 @@ export const drawerWidth = 256;
 // Create a theme instance.
 export const theme = createTheme({
   palette: {
-   // mode: 'dark',
+    // mode: 'dark',
     primary: {
       main: '#041C32',
       dark: '#041C32',
@@ -32,66 +32,12 @@ export const theme = createTheme({
 });
 
 theme.components = {
-  MuiDrawer: {
-    styleOverrides: {
-      paper: {
-        backgroundColor: '#081627',
-      },
-    },
-  },
-  MuiButton: {
-    styleOverrides: {
-      root: {
-        textTransform: 'none',
-      },
-      contained: {
-        boxShadow: 'none',
-        '&:active': {
-          boxShadow: 'none',
-        },
-      },
-    },
-  },
-  MuiTabs: {
-    styleOverrides: {
-      root: {
-        marginLeft: theme.spacing(1),
-      },
-      indicator: {
-        height: 3,
-        borderTopLeftRadius: 3,
-        borderTopRightRadius: 3,
-        backgroundColor: theme.palette.common.white,
-      },
-    },
-  },
   MuiTableHead: {
     styleOverrides: {
       root: {
         marginLeft: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
         color: theme.palette.common.white,
-      },
-    },
-  },
-  MuiTab: {
-    styleOverrides: {
-      root: {
-        textTransform: 'none',
-        margin: '0 16px',
-        minWidth: 0,
-        padding: 0,
-        [theme.breakpoints.up('md')]: {
-          padding: 0,
-          minWidth: 0,
-        },
-      },
-    },
-  },
-  MuiIconButton: {
-    styleOverrides: {
-      root: {
-        padding: theme.spacing(1),
       },
     },
   },
@@ -102,47 +48,18 @@ theme.components = {
       },
     },
   },
-  MuiDivider: {
-    styleOverrides: {
-      root: {
-        backgroundColor: 'rgb(255,255,255,0.15)',
-      },
-    },
-  },
-  MuiListItemButton: {
-    styleOverrides: {
-      root: {
-        '&.Mui-selected': {
-          color: '#4fc3f7',
-        },
-      },
-    },
-  },
-  MuiListItemText: {
-    styleOverrides: {
-      primary: {
-        fontSize: 14,
-        fontWeight: theme.typography.fontWeightMedium,
-      },
-    },
-  },
-  MuiListItemIcon: {
-    styleOverrides: {
-      root: {
-        color: 'inherit',
-        minWidth: 'auto',
-        marginRight: theme.spacing(2),
-        '& svg': {
-          fontSize: 20,
-        },
-      },
-    },
-  },
   MuiAvatar: {
     styleOverrides: {
       root: {
         width: 32,
         height: 32,
+      },
+    },
+  },
+  MuiPaper: {
+    styleOverrides: {
+      root: {
+        backgroundColor: '#fdfdfd',
       },
     },
   },

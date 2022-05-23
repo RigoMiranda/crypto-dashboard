@@ -1,14 +1,17 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import { Order } from 'coinbase-pro-node';
-import { Box, IconButton, Typography } from '@mui/material';
+import {
+  IconButton,
+  Table,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableContainer,
+  Paper,
+  TableCell,
+  tableCellClasses,
+} from '@mui/material';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useAppContext } from '../../context/AppContext';
 import moment from 'moment';
@@ -45,10 +48,7 @@ type OrderTableType = {
   type?: OrderTableEnum;
 };
 
-export default function OrdersTable({
-  orders,
-  type = OrderTableEnum.history,
-}: OrderTableType) {
+function OrdersTable({ orders, type = OrderTableEnum.history, ...props }: OrderTableType) {
   const { trader } = useAppContext();
 
   const handleCancelTransaction = async (transactionId: string) => {
@@ -99,3 +99,5 @@ export default function OrdersTable({
     </TableContainer>
   );
 }
+
+export default React.memo(OrdersTable);

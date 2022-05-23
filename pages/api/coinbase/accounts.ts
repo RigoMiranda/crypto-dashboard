@@ -26,6 +26,7 @@ const Coin = async (req: NextApiRequest, res: NextApiResponse) => {
             ...tempCoin,
             currency: account.currency,
             logo: `/crycons/${account.currency.toLocaleLowerCase()}.png`,
+            coinBalance: account.balance,
           });
         }
       }
