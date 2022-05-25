@@ -36,7 +36,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const columns = ['Type', 'Executed Value', 'Size', 'Price', 'Date'];
+const columns = ['Type', 'Executed Value', 'Size', 'Price', 'Fees']; // 'Date'
 
 export enum OrderTableEnum {
   active,
@@ -54,15 +54,14 @@ function OrdersTable({ orders, type = OrderTableEnum.history, ...props }: OrderT
   const handleCancelTransaction = async (transactionId: string) => {
     await trader.cancelOrder(transactionId);
   };
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="customized table">
         <TableHead>
           <TableRow>
             {columns.map((titleCol, i) => (
-              <StyledTableCell key={i} align="center">
-                {titleCol}
-              </StyledTableCell>
+              <StyledTableCell key={i}>{titleCol}</StyledTableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -70,23 +69,26 @@ function OrdersTable({ orders, type = OrderTableEnum.history, ...props }: OrderT
           {orders &&
             orders?.map((order: Order) => (
               <StyledTableRow key={order.id}>
-                <StyledTableCell component="th" scope="row" align="center">
+                <StyledTableCell component="th" scope="row">
                   {order.side}
                 </StyledTableCell>
-                <StyledTableCell component="th" scope="row" align="center">
+                <StyledTableCell component="th" scope="row">
                   {usdFormatter.format(Number(order.executed_value))}
                 </StyledTableCell>
-                <StyledTableCell component="th" scope="row" align="center">
+                <StyledTableCell component="th" scope="row">
                   {Number(order.size).toFixed(3)}
                 </StyledTableCell>
-                <StyledTableCell component="th" scope="row" align="center">
+                <StyledTableCell component="th" scope="row">
                   {usdFormatter.format(Number(order.price))}
                 </StyledTableCell>
-                <StyledTableCell component="th" scope="row" align="center">
-                  {moment(order.created_at).format('MMM MM, YYYY')}
+                <StyledTableCell component="th" scope="row">
+                  {usdFormatter.format(Number(order.fill_fees))}
                 </StyledTableCell>
+                {/* <StyledTableCell component="th" scope="row">
+                  {moment(order.created_at).format('MMM MM, YYYY')}
+                </StyledTableCell> */}
                 {type === OrderTableEnum.active && (
-                  <StyledTableCell component="th" scope="row" align="center">
+                  <StyledTableCell component="th" scope="row">
                     <IconButton onClick={() => handleCancelTransaction(order.id)}>
                       <HighlightOffIcon />
                     </IconButton>
