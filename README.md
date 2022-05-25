@@ -11,11 +11,15 @@ The dashboard will help us understand the current investment by showing you the 
 You will need a Coinbase Pro account and create an `Read Only` Key, Phrase and Secret. Then create an `.env` file as follow:
 
 ```bash
-npm run dev
-# or
+Key=*********
+Secret=*******
+Passphrase=*******
+```
+
+#### Install Dependencies and Run Server
+```bash
+yarn install
 yarn dev
 ```
 
 Open [http://localhost:7500](http://localhost:7500) with your browser to see the result.
-
-### 
