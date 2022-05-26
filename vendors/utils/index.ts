@@ -4,11 +4,11 @@ export const cleanNumber = (num: number): number => {
 };
 
 export const calculateDifference = (
-  currentValue: number,
-  oldValue: number
+  finalValue: number,
+  initialValue: number
 ): { percentage: number; usd: number } => {
-  const usd = currentValue - oldValue;
-  const percentage = (usd / currentValue) * 100;
+  const usd = finalValue - initialValue;
+  const percentage = (usd / initialValue) * 100;
   return { percentage, usd };
 };
 
