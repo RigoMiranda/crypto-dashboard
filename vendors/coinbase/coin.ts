@@ -1,6 +1,6 @@
 import { Order, OrderStatus } from 'coinbase-pro-node';
 import { getClient } from './config';
-import { calculateDifference } from '../../vendors/utils';
+import { calculatePercentageIncrease } from '../../vendors/utils';
 
 const client = getClient();
 
@@ -97,14 +97,14 @@ const Coin = async (productID: string, currency: string) => {
     tempBalance = Number(balance);
     tempAvailable = Number(available);
     tempUsd = price * available;
-    tempPercentage24h = calculateDifference(price, Number(stats?.open)).percentage;
+    tempPercentage24h = calculatePercentageIncrease(price, Number(stats?.open)).percentage;
 
     const orders = (await getAllOrders(currency)) || [];
     const investment = calculateInvestment(orders) || 0.0;
     if (orders) {
       const order = orders[0];
       if (order) {
-        difCalc = calculateDifference(price, Number(order?.price));
+        difCalc = calculatePercentageIncrease(price, Number(order?.price));
       }
     }
 

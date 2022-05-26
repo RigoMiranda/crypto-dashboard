@@ -1,9 +1,4 @@
-export const cleanNumber = (num: number): number => {
-  let strNum = num.toString().split('.');
-  return Number(strNum[0]);
-};
-
-export const calculateDifference = (
+export const calculatePercentageIncrease = (
   finalValue: number,
   initialValue: number
 ): { percentage: number; usd: number } => {
