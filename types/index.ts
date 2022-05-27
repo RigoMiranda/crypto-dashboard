@@ -9,14 +9,20 @@ export type APICredentialsType = {
   isDefault: boolean;
 };
 
+// export type OrderType = {
+//   difPercentage: number;
+// } & Order;
+
 export type CoinType = {
   available: number;
+  activeBuyingOrders: Order[];
   balance: number;
   coinBalance: number;
   currency: string;
   difCalc?: {
     percentage: number;
   };
+  doneBuyingOrders: Order[];
   investment: number;
   logo: string;
   orders: Order[];

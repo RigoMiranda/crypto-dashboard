@@ -1,15 +1,15 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { sleep } from '../utils';
-import axios from 'axios';
 import { CoinType } from '../../types';
 
-export const useTrader = () => {
+export const useAccount = () => {
   const [coins, setCoins] = useState<CoinType[]>([]);
   const [portfolio, setPortfolio] = useState<number>(0.0);
   const [usdAmount, setUsdAmount] = useState<number>(0.0);
   const [usdId, setUsdId] = useState<string | undefined>();
 
-  const updateTrader = async () => {
+  const updateAccounts = async () => {
     const { coins: coinsData, portfolio: tempPortfolio, usdId, usdAmount } = await getAccounts();
     if (!coins) return;
     setUsdId(usdId);
@@ -29,8 +29,8 @@ export const useTrader = () => {
     }
   };
 
-  const trade = async () => {
-    await updateTrader();
+  const update = async () => {
+    await updateAccounts();
     await sleep(8000);
   };
 
@@ -39,7 +39,7 @@ export const useTrader = () => {
     portfolio,
     usdAmount,
     usdId,
-    updateTrader,
-    trade,
+    updateAccounts,
+    update,
   };
 };

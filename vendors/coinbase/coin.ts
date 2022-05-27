@@ -32,22 +32,12 @@ const getOrders = async (currency: string, status: (OrderStatus | 'all')[] = ['a
       product_id: currency,
       status,
     });
-    return orders;
+
+    return orders.data;
   } catch (error: any) {
     // Log Error Message
     console.log(error.response?.data?.message);
-  }
-};
-
-const getAllOrders = async (currency: string): Promise<Order[] | undefined> => {
-  try {
-    const orders = await getOrders(currency);
-    const tempOrders = orders?.data as Order[];
-
-    return tempOrders;
-  } catch (error: any) {
-    // Log Error Message
-    console.log(error.response?.data?.message);
+    return [];
   }
 };
 
@@ -99,7 +89,8 @@ const Coin = async (productID: string, currency: string) => {
     tempUsd = price * available;
     tempPercentage24h = calculatePercentageIncrease(price, Number(stats?.open)).percentage;
 
-    const orders = (await getAllOrders(currency)) || [];
+    const orders = await getOrders(currency, [OrderStatus.DONE]);
+
     const investment = calculateInvestment(orders) || 0.0;
     if (orders) {
       const order = orders[0];
@@ -109,15 +100,15 @@ const Coin = async (productID: string, currency: string) => {
     }
 
     return {
+      available: tempAvailable,
+      balance: tempBalance,
+      difCalc,
+      investment,
+      orders,
+      percentage24h: tempPercentage24h,
       price: tempPrice,
       size: tempSize,
-      balance: tempBalance,
-      available: tempAvailable,
       usd: tempUsd,
-      percentage24h: tempPercentage24h,
-      orders,
-      investment,
-      difCalc,
     };
   } catch (error) {
     console.error(error);

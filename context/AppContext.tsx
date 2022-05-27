@@ -1,16 +1,16 @@
 import React, { createContext, useState, useEffect, useContext, ReactFragment } from 'react';
-import { useTrader } from '../vendors/coinbase/trader';
+import { useAccount } from '../vendors/coinbase/account';
 
 export const AppContext = createContext<any>({});
 
 export const AppContextProvider = ({ children }: { children: ReactFragment }) => {
   const [mode, setMode] = useState<'light' | 'dark'>('light');
-  const { trade, coins, portfolio, usdAmount, usdId, updateTrader } = useTrader();
+  const { update, coins, portfolio, usdAmount, usdId, updateAccounts } = useAccount();
   const [refreshToken, setRefreshToken] = useState(Math.random());
 
   useEffect(() => {
     const startTrading = async () => {
-      await trade();
+      await update();
       setRefreshToken(Math.random());
     };
     startTrading();
@@ -23,7 +23,7 @@ export const AppContextProvider = ({ children }: { children: ReactFragment }) =>
         portfolio,
         usdAmount,
         usdId,
-        updateTrader,
+        updateAccounts,
         mode,
         setMode,
       }}

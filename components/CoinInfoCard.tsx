@@ -14,7 +14,6 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Orders from './Orders';
 import { CoinType } from '../types';
-import { truncateDecimals } from '../vendors/utils';
 
 export const CoinCard = ({ coin }: { coin: CoinType }) => {
   return (
@@ -33,7 +32,7 @@ export const CoinCard = ({ coin }: { coin: CoinType }) => {
             Balance
           </Typography>
           <Typography variant="h5">{usdFormatter.format(coin.usd)}</Typography>
-          <Typography variant="body1">{truncateDecimals(coin.coinBalance, 10)}</Typography>
+          <Typography variant="body1">Size: {Number(coin?.coinBalance).toFixed(10)}</Typography>
         </Stack>
       </Stack>
       <Grid
@@ -59,7 +58,7 @@ export const CoinCard = ({ coin }: { coin: CoinType }) => {
               Last Order
             </Typography>
             <Typography variant="body1" color={coin?.difCalc?.percentage > 0 ? 'green' : 'red'}>
-              {coin?.difCalc?.percentage.toFixed(2)}%
+              {coin?.difCalc?.percentage.toFixed(3)}%
             </Typography>
           </Stack>
         )}
@@ -68,7 +67,7 @@ export const CoinCard = ({ coin }: { coin: CoinType }) => {
             Last 24h
           </Typography>
           <Typography variant="body1" color={coin.percentage24h > 0 ? 'green' : 'red'}>
-            {coin.percentage24h.toFixed(2)}%
+            {coin.percentage24h.toFixed(3)}%
           </Typography>
         </Stack>
         <Stack>

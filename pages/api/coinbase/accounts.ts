@@ -4,7 +4,7 @@ import { getClient } from '../../../vendors/coinbase/config';
 
 const client = getClient();
 
-const Coin = async (req: NextApiRequest, res: NextApiResponse) => {
+const Accounts = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const accounts = await client?.rest.account.listAccounts();
     let coins = [];
@@ -42,4 +42,4 @@ const Coin = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default Coin;
+export default Accounts;
