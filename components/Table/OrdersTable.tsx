@@ -11,11 +11,14 @@ import {
   Paper,
   TableCell,
   tableCellClasses,
+  Typography,
 } from '@mui/material';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useAppContext } from '../../context/AppContext';
 import moment from 'moment';
 import { usdFormatter } from '../../utils';
+import { calculatePercentageIncrease } from '../../vendors/utils';
+import { CoinType } from '../../types';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,7 +39,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const columns = ['Type', 'Executed Value', 'Size', 'Price', 'Fees']; // 'Date'
+const columns = ['Type', 'Executed Value', 'Size', 'Price', '%']; // 'Date'
 
 export enum OrderTableEnum {
   active,
@@ -44,17 +47,26 @@ export enum OrderTableEnum {
 }
 
 type OrderTableType = {
-  orders: Order[];
+  coin: CoinType;
   type?: OrderTableEnum;
 };
 
-function OrdersTable({ orders, type = OrderTableEnum.history, ...props }: OrderTableType) {
-  const { trader } = useAppContext();
+const PercentageOrder = ({
+  coinCurrentValue,
+  orderExecutedValue,
+}: {
+  coinCurrentValue: number;
+  orderExecutedValue: number;
+}) => {
+  const value = calculatePercentageIncrease(coinCurrentValue, orderExecutedValue);
+  return (
+    <Typography variant="body1" color={value.percentage > 0 ? 'green' : 'red'}>
+      {value.percentage.toFixed(3)}%
+    </Typography>
+  );
+};
 
-  const handleCancelTransaction = async (transactionId: string) => {
-    await trader.cancelOrder(transactionId);
-  };
-
+function OrdersTable({ coin, type = OrderTableEnum.history, ...props }: OrderTableType) {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="customized table">
@@ -66,8 +78,8 @@ function OrdersTable({ orders, type = OrderTableEnum.history, ...props }: OrderT
           </TableRow>
         </TableHead>
         <TableBody>
-          {orders &&
-            orders?.map((order: Order) => (
+          {coin.orders &&
+            coin.orders?.map((order: Order) => (
               <StyledTableRow key={order.id}>
                 <StyledTableCell component="th" scope="row">
                   {order.side}
@@ -82,18 +94,17 @@ function OrdersTable({ orders, type = OrderTableEnum.history, ...props }: OrderT
                   {usdFormatter.format(Number(order.price))}
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
-                  {usdFormatter.format(Number(order.fill_fees))}
+                  <PercentageOrder
+                    coinCurrentValue={coin.price}
+                    orderExecutedValue={Number(order.price)}
+                  />
                 </StyledTableCell>
+                {/* <StyledTableCell component="th" scope="row">
+                  {usdFormatter.format(Number(order.fill_fees))}
+                </StyledTableCell> */}
                 {/* <StyledTableCell component="th" scope="row">
                   {moment(order.created_at).format('MMM MM, YYYY')}
                 </StyledTableCell> */}
-                {type === OrderTableEnum.active && (
-                  <StyledTableCell component="th" scope="row">
-                    <IconButton onClick={() => handleCancelTransaction(order.id)}>
-                      <HighlightOffIcon />
-                    </IconButton>
-                  </StyledTableCell>
-                )}
               </StyledTableRow>
             ))}
         </TableBody>
