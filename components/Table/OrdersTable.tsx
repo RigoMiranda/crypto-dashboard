@@ -53,15 +53,19 @@ type OrderTableType = {
 
 const PercentageOrder = ({
   coinCurrentValue,
-  orderExecutedValue,
+  orderPrice,
+  executedValue,
 }: {
   coinCurrentValue: number;
-  orderExecutedValue: number;
+  orderPrice: number;
+  executedValue: number;
 }) => {
-  const value = calculatePercentageIncrease(coinCurrentValue, orderExecutedValue);
+  const value = calculatePercentageIncrease(coinCurrentValue, orderPrice);
+  const amount = executedValue * (1 + value.percentage / 100);
+  console.log({ executedValue });
   return (
     <Typography variant="body1" color={value.percentage > 0 ? 'green' : 'red'}>
-      {value.percentage.toFixed(3)}%
+      {value.percentage.toFixed(3)}% | {usdFormatter.format(amount)}
     </Typography>
   );
 };
@@ -96,7 +100,8 @@ function OrdersTable({ coin, type = OrderTableEnum.history, ...props }: OrderTab
                 <StyledTableCell component="th" scope="row">
                   <PercentageOrder
                     coinCurrentValue={coin.price}
-                    orderExecutedValue={Number(order.price)}
+                    orderPrice={Number(order.price)}
+                    executedValue={Number(order.executed_value)}
                   />
                 </StyledTableCell>
                 {/* <StyledTableCell component="th" scope="row">
