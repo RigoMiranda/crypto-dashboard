@@ -61,7 +61,7 @@ const PercentageOrder = ({
   executedValue: number;
 }) => {
   const value = calculatePercentageIncrease(coinCurrentValue, orderPrice);
-  const amount = executedValue * (1 + value.percentage / 100);
+  const amount = executedValue * (value.percentage / 100);
   console.log({ executedValue });
   return (
     <Typography variant="body1" color={value.percentage > 0 ? 'green' : 'red'}>
